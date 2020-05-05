@@ -70,7 +70,7 @@ async function testServer(server) {
                 r: "success",
                 s: server,
                 d: (Date.now()-start)/1000,
-                ie: res.id
+                i: res.id
             });
 
             if (res.server !== server) {
