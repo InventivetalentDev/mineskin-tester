@@ -161,12 +161,16 @@ async function run() {
 run().then(() => {
     console.log("done!");
 
-    console.log("Summary: ")
+    let successRate = successCount / (TESTS_PER_SERVER * SERVERS.length);
+
+    console.log("Summary: ");
     console.log("TESTS:   " + (TESTS_PER_SERVER * SERVERS.length));
     console.log("SUCCESS: " + successCount);
     console.log("FAIL:    " + failCount);
-    console.log("(" + Math.round(successCount / (TESTS_PER_SERVER * SERVERS.length) * 100) + "% success rate)");
+    console.log("(" + Math.round(successRate * 100) + "% success rate)");
     console.log(" ");
     console.log(JSON.stringify(log, null, 2));
+
+    process.exit(successRate > 0.5 ? 0 : 1);
 });
 
