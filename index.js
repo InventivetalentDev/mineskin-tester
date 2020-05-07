@@ -42,7 +42,10 @@ async function testServer(server) {
         let res = await request({
             method: "POST",
             url: "http://" + server + ".api.mineskin.org/generate/upload",
-            formData: formData
+            formData: formData,
+            headers: {
+                "User-Agent": "mineskin-tester"
+            }
         });
         console.debug("Response: ");
         try {
