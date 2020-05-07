@@ -22,6 +22,8 @@ async function testServer(server) {
 
     const start = Date.now();
 
+    let testResult = {};
+
     const formData = {
         model: model,
         name: name,
@@ -59,22 +61,22 @@ async function testServer(server) {
             console.log("FAILED ("+Math.round((Date.now()-start)/1000)+"s)");
             failCount++;
             console.warn("Error: " + res.error);
-            log[server].push({
+            testResult = {
                 r: "fail",
                 s: server,
                 d: (Date.now()-start)/1000,
                 e: res.error || res.statusCode
-            })
+            };
         } else if (res.id) {
             console.log("SUCCESS ("+Math.round((Date.now()-start)/1000)+"s)");
             successCount++;
             console.log("New ID: " + res.id);
-            log[server].push({
+            testResult = {
                 r: "success",
                 s: server,
                 d: (Date.now()-start)/1000,
                 i: res.id
-            });
+            };
 
             if (res.server !== server) {
                 console.warn("Server of returned skin does not match the requested server! (req: " + server + ", ret: " + res.server + ")");
@@ -96,14 +98,29 @@ async function testServer(server) {
         if (err)
             console.warn("Error: " + err.error);
 
-        log[server].push({
+        testResult = {
             r: "fail",
             s: server,
             d: (Date.now()-start)/1000,
             e: err.error || err.statusCode
-        })
+        };
     }
+    log[server].push(testResult);
     console.log("  ");
+
+    if (process.env.MINESKIN_TEST_UPLOAD_KEY) {
+        request({
+            method: "POST",
+            url: "http://" + server + ".api.mineskin.org/testing_upload_tester_result",
+            json: {
+                token: process.env.MINESKIN_TEST_UPLOAD_KEY,
+                data: testResult
+            },
+            headers: {
+                "User-Agent": "mineskin-tester"
+            }
+        });
+    }
 }
 
 function makeRandomImage(width = 64, height = 64) {
