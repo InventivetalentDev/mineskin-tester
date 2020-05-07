@@ -111,7 +111,7 @@ async function testServer(server) {
     if (process.env.MINESKIN_TEST_UPLOAD_KEY) {
         request({
             method: "POST",
-            url: "http://" + server + ".api.mineskin.org/testing_upload_tester_result",
+            url: "http://" + server + ".api.mineskin.org/testing/upload_tester_result",
             json: {
                 token: process.env.MINESKIN_TEST_UPLOAD_KEY,
                 data: testResult
