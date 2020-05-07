@@ -60,7 +60,7 @@ async function testServer(server) {
                 r: "fail",
                 s: server,
                 d: (Date.now()-start)/1000,
-                e: res.error
+                e: res.error || res.statusCode
             })
         } else if (res.id) {
             console.log("SUCCESS ("+Math.round((Date.now()-start)/1000)+"s)");
@@ -97,7 +97,7 @@ async function testServer(server) {
             r: "fail",
             s: server,
             d: (Date.now()-start)/1000,
-            e: err.error
+            e: err.error || err.statusCode
         })
     }
     console.log("  ");
