@@ -213,7 +213,29 @@ function sleep(t = 1000) {
     })
 }
 
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array/2450976#2450976
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
 async function run() {
+    shuffle(SERVERS);
+
     console.log("Running " + TESTS_PER_SERVER + " tests each on " + SERVERS.length + " servers...");
     for (let i = 0; i < TESTS_PER_SERVER; i++) {
         console.log("Running Test #" + (i + 1));
