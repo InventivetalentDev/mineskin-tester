@@ -86,16 +86,18 @@ async function testServer(server) {
                 console.warn("Model of returned skin does not match the requested model! (req: " + model + ", ret: " + res.model + ")")
             }
 
+            let mismatchCounter = 0;
             let generatedImgData = await loadImageIntoCanvasData(res.data.texture.url);
             if (img.imageData.width !== generatedImgData.width) {
                 console.warn("Width of original image and generated image do not match! (req: " + img.imageData.width + ", ret: " + generatedImgData.width + ")");
+                mismatchCounter++;
             } else if (img.imageData.height !== generatedImgData.height) {
                 console.warn("Height of original image and generated image do not match! (req: " + img.imageData.height + ", ret: " + generatedImgData.height + ")");
+                mismatchCounter++;
             } else {
                 let originalData = img.imageData.data;
                 let generatedData = generatedImgData.data;
                 let i = 0;
-                let mismatchCounter = 0;
                 // based on https://gist.github.com/olvado/1048628/d8184b8ea695372e49b403555870a044ec9d25d0#file-getaveragecolourasrgb-js-L29
                 while ((i += PIXEL_CHECK_INTERVAL * 4) < originalData.length) {
                     if (originalData[i] !== generatedData[i]) {// R
@@ -115,12 +117,12 @@ async function testServer(server) {
                         mismatchCounter++;
                     }
                 }
-                if (mismatchCounter > 0) {
-                    console.warn("Found a total of "+mismatchCounter+" color mismatches in generated image");
-                    testResult.m = mismatchCounter;
-                } else {
-                    console.debug("Generated image matches original! Yay!")
-                }
+            }
+            if (mismatchCounter > 0) {
+                console.warn("Found a total of "+mismatchCounter+" color mismatches in generated image");
+                testResult.m = mismatchCounter;
+            } else {
+                console.debug("Generated image matches original! Yay!")
             }
         }
     } catch (e) {
