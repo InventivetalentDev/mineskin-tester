@@ -2,7 +2,7 @@ const request = require("request-promise");
 const {createCanvas, loadImage} = require("canvas");
 const hasha = require("hasha");
 
-const SERVERS = ["apple", "nougat", "melon"];
+const SERVERS = ["nougat", "noodle", "nugget", "melon", "mango"];
 const TESTS_PER_SERVER = 4;
 const PIXEL_CHECK_INTERVAL = 4;
 
