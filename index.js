@@ -44,9 +44,10 @@ async function testServer(server) {
     try {
         let res = await request({
             method: "POST",
-            url: "http://" + server + ".api.mineskin.org/generate/upload",
+            url: "https://" + server + ".api.mineskin.org/generate/upload",
             formData: formData,
             headers: {
+                "Authorization": "Bearer " + process.env.MINESKIN_API_KEY,
                 "User-Agent": "mineskin-tester"
             }
         });
@@ -101,25 +102,25 @@ async function testServer(server) {
                 // based on https://gist.github.com/olvado/1048628/d8184b8ea695372e49b403555870a044ec9d25d0#file-getaveragecolourasrgb-js-L29
                 while ((i += PIXEL_CHECK_INTERVAL * 4) < originalData.length) {
                     if (originalData[i] !== generatedData[i]) {// R
-                        console.warn("Red Value of original image and generated image do not match at index "+i+"! (req: " + originalData[i] + ", ret: " + generatedData[i] + ")");
+                        console.warn("Red Value of original image and generated image do not match at index " + i + "! (req: " + originalData[i] + ", ret: " + generatedData[i] + ")");
                         mismatchCounter++;
                     }
-                    if (originalData[i+1] !== generatedData[i+1]) {// G
-                        console.warn("Green Value of original image and generated image do not match at index "+i+"! (req: " + originalData[i+1] + ", ret: " + generatedData[i+1] + ")");
+                    if (originalData[i + 1] !== generatedData[i + 1]) {// G
+                        console.warn("Green Value of original image and generated image do not match at index " + i + "! (req: " + originalData[i + 1] + ", ret: " + generatedData[i + 1] + ")");
                         mismatchCounter++;
                     }
-                    if (originalData[i+2] !== generatedData[i+2]) {// B
-                        console.warn("Blue Value of original image and generated image do not match at index "+i+"! (req: " + originalData[i+2] + ", ret: " + generatedData[i+2] + ")");
+                    if (originalData[i + 2] !== generatedData[i + 2]) {// B
+                        console.warn("Blue Value of original image and generated image do not match at index " + i + "! (req: " + originalData[i + 2] + ", ret: " + generatedData[i + 2] + ")");
                         mismatchCounter++;
                     }
-                    if (originalData[i+3] !== generatedData[i+3]) {// A
-                        console.warn("Alpha Value of original image and generated image do not match at index "+i+"! (req: " + originalData[i+3] + ", ret: " + generatedData[i+3] + ")");
+                    if (originalData[i + 3] !== generatedData[i + 3]) {// A
+                        console.warn("Alpha Value of original image and generated image do not match at index " + i + "! (req: " + originalData[i + 3] + ", ret: " + generatedData[i + 3] + ")");
                         mismatchCounter++;
                     }
                 }
             }
             if (mismatchCounter > 0) {
-                console.warn("Found a total of "+mismatchCounter+" color mismatches in generated image");
+                console.warn("Found a total of " + mismatchCounter + " color mismatches in generated image");
                 testResult.m = mismatchCounter;
             } else {
                 console.debug("Generated image matches original! Yay!")
@@ -152,7 +153,7 @@ async function testServer(server) {
     if (process.env.MINESKIN_TEST_UPLOAD_KEY) {
         request({
             method: "POST",
-            url: "http://" + server + ".api.mineskin.org/testing/upload_tester_result",
+            url: "https://" + server + ".api.mineskin.org/testing/upload_tester_result",
             json: {
                 token: process.env.MINESKIN_TEST_UPLOAD_KEY,
                 data: testResult
