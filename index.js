@@ -28,7 +28,7 @@ async function testServer(server) {
     const formData = {
         model: model,
         name: name,
-        visibility: 0,
+        visibility: 1,
         file: {
             value: img.imageBuffer,
             options: {
